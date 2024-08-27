@@ -20,6 +20,15 @@ public class Folder {
         return id;
     }
 
+    public User findUserById(List<User> users, String userId) {
+        for (User user : users) {
+            if(user.getId() = userId) {
+                return user;
+            }
+        }
+        return null;
+    }
+
     public String getFolderName() {
         return folderName;
     }

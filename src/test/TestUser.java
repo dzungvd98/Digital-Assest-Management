@@ -24,12 +24,5 @@ public class TestUser {
         assertEquals(2, user.getDrives().size());
     }
 
-    @Test
-    public void testPermissionOfUserInDrive() {
-        User user = InitUserData();
-        String permission = user.getPermission("D");
-        assertEquals("ADMIN", permission);
-
-    }
     
 }

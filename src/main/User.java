@@ -5,8 +5,8 @@ import java.util.List;
 
 public class User {
 
-    private String name;
     private int id;
+    private String name;
     private List<Drive> drives;
 
     public User() {
@@ -55,8 +55,13 @@ public class User {
         drives.add(drive);
     }
 
-    public void GrandPermission(String driveId, Permission permission) {
-
+    public User findUserById(List<User> users, int userId) {
+        for (User user : users) {
+            if(user.getId() = userId) {
+                return user;
+            }
+        }
+        return null;
     }
 
 
