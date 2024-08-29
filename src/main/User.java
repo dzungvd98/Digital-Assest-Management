@@ -15,6 +15,12 @@ public class User {
 
     
 
+    public User(String userName) {
+        this.name = userName;
+    }
+
+
+
     public String getName() {
         return name;
     }
@@ -55,14 +61,15 @@ public class User {
         drives.add(drive);
     }
 
-    public User findUserById(List<User> users, int userId) {
+    public static User findUserByName(List<User> users, String userName) {
         for (User user : users) {
-            if(user.getId() = userId) {
+            if(user.getName().equals(userName)) {
                 return user;
             }
         }
         return null;
     }
+
 
 
 }

@@ -1,6 +1,6 @@
 package main;
 
-public enum Permission {
+public enum PermissionEnum {
     ADMIN,
     CONTRIBUTOR,
     READER

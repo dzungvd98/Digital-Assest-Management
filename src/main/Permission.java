@@ -4,11 +4,11 @@ import java.util.List;
 
 public class Permission {
     private String id;
-    private String driveName;
-    private String userName;
+    private Drive drive;
+    private User user;
     List<PermissionEnum> permissions;
-    private String parentFolderName;
-    private String folderName;
+    private Folder parentFolder;
+    private Folder folderName;
     private File file;
 
     
@@ -21,30 +21,28 @@ public class Permission {
     }
 
 
-
     public void setId(String id) {
         this.id = id;
     }
 
 
-
-    public String getDriveName() {
-        return driveName;
+    public Drive getDrive() {
+        return drive;
     }
 
 
-    public void setDriveName(String driveName) {
-        this.driveName = driveName;
+    public void setDrive(Drive drive) {
+        this.drive = drive;
     }
 
 
-    public String getUserName() {
-        return userName;
+    public User getUser() {
+        return user;
     }
 
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUser(User user) {
+        this.user = user;
     }
 
 
@@ -58,22 +56,22 @@ public class Permission {
     }
 
 
-    public String getParentFolderName() {
-        return parentFolderName;
+    public Folder getParentFolder() {
+        return parentFolder;
     }
 
 
-    public void setParentFolderName(String parentFolderName) {
-        this.parentFolderName = parentFolderName;
+    public void setParentFolder(Folder parentFolder) {
+        this.parentFolder = parentFolder;
     }
 
 
-    public String getFolderName() {
+    public Folder getFolderName() {
         return folderName;
     }
 
 
-    public void setFolderName(String folderName) {
+    public void setFolderName(Folder folderName) {
         this.folderName = folderName;
     }
 
@@ -83,16 +81,10 @@ public class Permission {
     }
 
 
-
     public void setFile(File file) {
         this.file = file;
     }
 
-
-    public void GrandDrivePermission(String userId, String driveId, PermissionEnum permission) {
-        
-    }
-
-
+    
 
 }

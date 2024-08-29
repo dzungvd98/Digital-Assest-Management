@@ -1,14 +1,21 @@
 package test;
 
-import main.Permission;
-import main.PermissionEnum;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
+import main.DigitalAssetsManagement;
+import main.Drive;
+import main.User;
 
 public class TestPermission {
     
-    public Permission InitPermissionData() {
-        Permission permission = new Permission();
-        permission.GrandDrivePermission("1", "D", PermissionEnum.CONTRIBUTOR);
 
-
+    @Test
+    public void TestUserHasAdminPermission() {
+        DigitalAssetsManagement dam = new DigitalAssetsManagement();
+        User user = new User("duy dung");
+        Drive drive = new Drive("D", "Hoc Tap");
+        assertEquals(false, dam.isUserHasAdminPermissionAtDrive(user, drive));
     }
 }
