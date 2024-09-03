@@ -1,36 +1,38 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class DigitalAssetsManagement {
-    List<User> users;
-    List<Drive> drives;
-    List<Folder> folders;
-    List<File> files;
+    Set<User> users;
+    Set<Drive> drives;
+    Set<Folder> folders;
+    Set<File> files;
     List<Permission> permissions;
 
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
-    public void setUsers(List<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
-    public List<Drive> getDrives() {
+    public Set<Drive> getDrives() {
         return drives;
     }
-    public void setDrives(List<Drive> drives) {
+    public void setDrives(Set<Drive> drives) {
         this.drives = drives;
     }
-    public List<Folder> getFolders() {
+    public Set<Folder> getFolders() {
         return folders;
     }
-    public void setFolders(List<Folder> folders) {
+    public void setFolders(Set<Folder> folders) {
         this.folders = folders;
     }
-    public List<File> getFiles() {
+    public Set<File> getFiles() {
         return files;
     }
-    public void setFiles(List<File> files) {
+    public void setFiles(Set<File> files) {
         this.files = files;
     }
     public List<Permission> getPermissions() {
@@ -62,6 +64,34 @@ public class DigitalAssetsManagement {
         }
         return false;
     }
-    
+
+
+    public void grandPermission(User userGrand, User userGetPermission, Drive drive, PermissionEnum permissionEnum) {
+        Permission permiss = this.findPermissionByDrive(this.permissions, userGetPermission, drive);
+        if(permiss != null) {
+            Boolean isUserHadThisPermission = permiss.isUserHadThisPermission(permissionEnum);
+            if(!isUserHadThisPermission) {
+                List<PermissionEnum> listPermissEnum = permiss.getPermissions(); 
+                listPermissEnum.add(permissionEnum);
+                permiss.setPermissions(listPermissEnum);
+            }
+        }
+        else {
+            // Tạo một quyền mới
+            Permission newPermission = new Permission();
+            newPermission.setDrive(drive);
+            newPermission.setUser(userGetPermission);
+
+            // Thêm quyền mới vào danh sách quyền
+            List<PermissionEnum> newPermissionsList = new ArrayList<>();
+            newPermissionsList.add(permissionEnum);
+            newPermission.setPermissions(newPermissionsList);
+
+            // Thêm quyền mới vào danh sách quản lý quyền
+            this.permissions.add(newPermission);
+        }
+        
+        
+    }
 
 }

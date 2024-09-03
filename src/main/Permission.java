@@ -85,6 +85,10 @@ public class Permission {
         this.file = file;
     }
 
-    
+    public Boolean isUserHadThisPermission(PermissionEnum perE) {
+        List<PermissionEnum> permissions = this.getPermissions();
+        int index = permissions.indexOf(perE);
+        return index != -1;
+    }
 
 }
