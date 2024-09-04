@@ -1,76 +1,33 @@
 package main;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class User {
 
-    private int id;
-    private String name;
-    private List<Drive> drives;
+    private String username;
+    private Map<Drive, Set<Permission>> drivePermissions;
 
-    public User() {
-        drives = new ArrayList<>();
+    public User(String username) {
+        this.username = username;
+        this.drivePermissions = new HashMap<>();
     }
 
-    
-
-    public User(String userName) {
-        this.name = userName;
+    public String getUserName() {
+        return username;
     }
 
-
-
-    public String getName() {
-        return name;
+    public void grantPermission(Drive drive, Permission permission) {
+        drivePermissions.computeIfAbsent(drive, k -> new HashSet<>()).add(permission);
     }
 
-
-
-    public void setName(String name) {
-        this.name = name;
+    public Set<Permission> getPermissions(Drive drive) {
+        return drivePermissions.getOrDefault(drive, new HashSet<>());
     }
 
-
-
-    public int getId() {
-        return id;
+    public boolean hasPermission(Drive drive, Permission permission) {
+        return drivePermissions.containsKey(drive) && drivePermissions.get(drive).contains(permission);
     }
-
-
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-
-
-    public List<Drive> getDrives() {
-        return drives;
-    }
-
-
-
-    public void setDrives(List<Drive> drives) {
-        this.drives = drives;
-    }
-
-
-
-    public void addDrive(Drive drive) {
-        drives.add(drive);
-    }
-
-    public static User findUserByName(List<User> users, String userName) {
-        for (User user : users) {
-            if(user.getName().equals(userName)) {
-                return user;
-            }
-        }
-        return null;
-    }
-
-
-
 
 }

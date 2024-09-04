@@ -1,52 +1,60 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Folder {
-    private String id;
-    private String folderName;
-    public List<Folder> subfolders;
-    public List<File> files;
-
-    public Folder(String id, String folderName) {
-        this.id = id;
-        this.folderName = folderName;
-        subfolders = new ArrayList<>();
-        files = new ArrayList<>();
+    private String name;
+    private List<Folder> subFolders;
+    private List<File> files;
+    private Map<User, Set<Permission>> userPermissions;
+    
+    public Folder(String name, List<Folder> subFolders, List<File> files, Map<User, Set<Permission>> userPermissions) {
+        this.name = name;
+        this.subFolders = subFolders;
+        this.files = files;
+        this.userPermissions = new HashMap<>();
     }
 
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-
-    public String getFolderName() {
-        return folderName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setFolderName(String folderName) {
-        this.folderName = folderName;
+    public List<Folder> getSubFolders() {
+        return subFolders;
     }
 
-    public List<Folder> getSubfolders() {
-        return subfolders;
-    }
-
-    public void setSubfolders(List<Folder> subfolders) {
-        this.subfolders = subfolders;
+    public void addsubFolder(Folder folder) {
+        subFolders.add(folder);
     }
 
     public List<File> getFiles() {
         return files;
     }
 
-    public void setFiles(List<File> files) {
+    public void addFile(List<File> files) {
         this.files = files;
     }
 
-    
-    
-    
+    public void grantPermission(User user, Permission permission) {
+        userPermissions.computeIfAbsent(user, k -> new HashSet<>()).add(permission);
+    }
+
+    public Set<Permission> getPermissions(User user) {
+        return userPermissions.getOrDefault(user, new HashSet<>());
+    }
+
+    public boolean hasPermission(User user, Permission permission) {
+        return userPermissions.containsKey(user) && userPermissions.get(user).contains(permission);
+    }
+
 
 }
