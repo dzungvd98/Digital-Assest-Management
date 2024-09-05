@@ -1,43 +1,29 @@
 package main;
 
 public class File {
-    private String id;
-    private String fileName;
-    private String fileExtend;
-
-
-    public File(String id, String fileName, String fileExtend) {
-        this.id = id;
-        this.fileName = fileName;
-        this.fileExtend = fileExtend;
-    }
-
-
-    public String getId() {
-        return id;
-    }
-
-
-    public String getFileName() {
-        return fileName;
-    }
-
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-
-    public String getFileExtend() {
-        return fileExtend;
-    }
-
-
-    public void setFileExtend(String fileExtend) {
-        this.fileExtend = fileExtend;
-    }
-
+    private String name;
+    private String content;
     
+    public File(String name, String content) {
+        this.name = name;
+        this.content = content;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     
 }
