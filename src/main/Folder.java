@@ -1,9 +1,9 @@
 package main;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,10 +13,10 @@ public class Folder {
     private List<File> files;
     private Map<User, Set<Permission>> userPermissions;
     
-    public Folder(String name, List<Folder> subFolders, List<File> files, Map<User, Set<Permission>> userPermissions) {
+    public Folder(String name) {
         this.name = name;
-        this.subFolders = subFolders;
-        this.files = files;
+        this.subFolders = new ArrayList<>();
+        this.files = new ArrayList<>();
         this.userPermissions = new HashMap<>();
     }
 

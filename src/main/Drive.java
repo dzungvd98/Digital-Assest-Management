@@ -56,11 +56,5 @@ public class Drive {
         return userPermission.containsKey(user) && userPermission.get(user).contains(permission);
     }
 
-    public void setUserPermission(Map<User, Set<Permission>> userPermission) {
-        this.userPermission = userPermission;
-    }
-
-    
-
     
 }
