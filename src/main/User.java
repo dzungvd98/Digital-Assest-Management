@@ -1,4 +1,5 @@
 package main;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -28,6 +29,20 @@ public class User {
 
     public boolean hasPermission(Drive drive, Permission permission) {
         return drivePermissions.containsKey(drive) && drivePermissions.get(drive).contains(permission);
+    }
+
+    public void createDrive(String driveName) {
+        boolean driveExists = drivePermissions.keySet()
+                .stream()
+                .anyMatch(existingDrive -> existingDrive.getName().equals(driveName));
+        if (driveExists) {
+            System.out.println("Drive already exists.");
+        } else {
+            // Tạo Drive mới với tên truyền vào
+            Drive newDrive = new Drive(driveName, this);
+            drivePermissions.put(newDrive, new HashSet<>());
+            System.out.println("Drive created successfully.");
+        }
     }
 
 }
