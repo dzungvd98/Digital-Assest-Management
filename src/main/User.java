@@ -19,16 +19,28 @@ public class User {
         return username;
     }
 
-    public void grantPermission(Drive drive, Permission permission) {
-        drivePermissions.computeIfAbsent(drive, k -> new HashSet<>()).add(permission);
+    public void grantPermission(String userName, String driveName, Permission permission) {
+        if(hasPermission(driveName, Permission.ADMIN)) {
+            Drive drive = Drive.findDriveByName(driveName, drivePermissions.keySet());
+            User user = findUserByUserName(userName, drive.getUserPermission().keySet());
+            
+        } else {
+            System.out.println("You don't have permission to do this!");
+        }
     }
 
     public Set<Permission> getPermissions(Drive drive) {
         return drivePermissions.getOrDefault(drive, new HashSet<>());
     }
 
-    public boolean hasPermission(Drive drive, Permission permission) {
-        return drivePermissions.containsKey(drive) && drivePermissions.get(drive).contains(permission);
+    public boolean hasPermission(String driveName, Permission permission) {
+        for(Drive drive : drivePermissions.keySet()) {
+            if(drive.getName().equals(driveName)) {
+                return drivePermissions.get(drive).contains(permission);
+            }
+        }
+
+        return false;
     }
 
     public void createDrive(String driveName) {
@@ -40,9 +52,41 @@ public class User {
         } else {
             // Tạo Drive mới với tên truyền vào
             Drive newDrive = new Drive(driveName, this);
-            drivePermissions.put(newDrive, new HashSet<>());
+            Set<Permission> permission = new HashSet<>();
+            permission.add(Permission.ADMIN);
+            drivePermissions.put(newDrive, permission);
             System.out.println("Drive created successfully.");
         }
     }
 
+    
+
+    public Map<Drive, Set<Permission>> getDrivePermissions() {
+        return drivePermissions;
+    }
+
+
+    public void createFolderInDrive(String driveName, String folderName) {
+        Drive drive = Drive.findDriveByName(driveName, drivePermissions.keySet());
+        if(drive != null) {
+            
+        } else {
+            System.out.println("Drive not found!");
+        }
+    }
+
+    public void createFile(String driveName, String folderName, String fileName) {
+
+    }
+
+    public static User findUserByUserName(String userName, Set<User> users) {
+        for(User user : users) {
+            if(user.getUserName().equals(userName)) {
+                return user;
+            }
+        }
+
+        return null;
+    }
+    
 }

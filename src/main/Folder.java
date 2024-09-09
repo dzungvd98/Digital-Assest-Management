@@ -9,6 +9,7 @@ import java.util.Set;
 
 public class Folder {
     private String name;
+    private Folder parentFolder;
     private List<Folder> subFolders;
     private List<File> files;
     private Map<User, Set<Permission>> userPermissions;
@@ -56,5 +57,13 @@ public class Folder {
         return userPermissions.containsKey(user) && userPermissions.get(user).contains(permission);
     }
 
+    public static Folder findFolderByFolderName(String folderName, Set<Folder> folders) {
+        for(Folder folder : folders) {
+            if(folder.getName().equals(folderName)) {
+                return folder;
+            }
+        }
+        return null;
+    }
 
 }

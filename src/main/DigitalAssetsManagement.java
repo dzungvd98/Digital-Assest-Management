@@ -7,6 +7,7 @@ import java.util.Set;
 public class DigitalAssetsManagement {
     private Map<String, User> users;
     private Map<String, Drive> drives;
+    private Map<String, Folder> folders;
 
     public DigitalAssetsManagement() {
         this.users = new HashMap<>();
@@ -22,13 +23,12 @@ public class DigitalAssetsManagement {
         if (owner != null) {
             Drive drive = new Drive(driveName, owner);
             drives.put(driveName, drive);
-            owner.grantPermission(drive, Permission.ADMIN);
         } else {
             System.out.println("Owner user not found!");
         }
     }
 
-    public void createFolder(String driveName, String folderName) {
+    public void createFolder(String userName, String driveName, String folderName) {
         Drive drive = drives.get(driveName);
         if (drive != null) {
             Folder folder = new Folder(folderName);
@@ -36,6 +36,10 @@ public class DigitalAssetsManagement {
         } else {
             System.out.println("Drive not found!");
         }
+    }
+
+    public void createFile(String driveName, String folderName, String fileName) {
+        
     }
 
     public void grantDrivePermission(String driveName, String username, Permission permission) {

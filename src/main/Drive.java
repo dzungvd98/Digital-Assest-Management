@@ -9,15 +9,17 @@ import java.util.Set;
 
 public class Drive {
     private String name;
-    private User owner;
     private List<Folder> rootFolders;
     private Map<User, Set<Permission>> userPermission;
 
     public Drive(String name, User owner) {
         this.name = name;
-        this.owner = owner;
         this.rootFolders = new ArrayList<>();
         this.userPermission = new HashMap<>();
+
+        Set<Permission> permissions = new HashSet<>();
+        permissions.add(Permission.ADMIN);
+        userPermission.put(owner, permissions);
     }
 
     public String getName() {
@@ -28,13 +30,6 @@ public class Drive {
         this.name = name;
     }
 
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
 
     public List<Folder> getRootFolders() {
         return rootFolders;
@@ -56,5 +51,17 @@ public class Drive {
         return userPermission.containsKey(user) && userPermission.get(user).contains(permission);
     }
 
+    public static Drive findDriveByName(String driveName, Set<Drive> set) {
+        for(Drive drive : set) {
+            if(drive.getName().equals(driveName)) {
+                return drive;
+            }
+        }
+        return null;
+    }
+
+    public Map<User, Set<Permission>> getUserPermission() {
+        return userPermission;
+    }
     
 }
