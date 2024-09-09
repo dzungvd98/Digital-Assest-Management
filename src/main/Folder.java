@@ -57,13 +57,51 @@ public class Folder {
         return userPermissions.containsKey(user) && userPermissions.get(user).contains(permission);
     }
 
-    public static Folder findFolderByFolderName(String folderName, Set<Folder> folders) {
-        for(Folder folder : folders) {
+    public Map<User, Set<Permission>> getUserPermissions() {
+        return userPermissions;
+    }
+
+    public void setUserPermissions(Map<User, Set<Permission>> userPermissions) {
+        this.userPermissions = userPermissions;
+    }
+
+    public static Folder findFolderInListByFolderName(String folderName, List<Folder> list) {
+        for(Folder folder : list) {
             if(folder.getName().equals(folderName)) {
                 return folder;
             }
         }
         return null;
     }
+
+    // Find folder in folder and subfolder by name
+    public Folder findFolderByFolderNameInFolder(String folderName) {
+        // Check if this folder is has name like 
+        if(this.getName().equals(folderName)) {
+            return this;
+        }
+
+        // Check all subfolder
+        for(Folder subFolder : subFolders) {
+            Folder foundFolder = subFolder.findFolderByFolderNameInFolder(folderName);
+            if(foundFolder != null) {
+                return foundFolder;
+            }
+        }
+
+        System.out.println("Folder not found!");
+        return null;
+    }
+
+    // Find folder in drive by name
+    public static Folder findFolderInDriveByFolderName(String folderName, Drive drive) {
+        for(Folder folder : drive.getRootFolders()) {
+            Folder folderFound = folder.findFolderByFolderNameInFolder(folderName);
+            if(folderFound != null) {
+                return folderFound;
+            }
+        }
+        return null;
+    } 
 
 }

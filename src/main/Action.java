@@ -13,8 +13,8 @@ public class Action {
 
         // Tạo ổ đĩa và thư mục
         dam.createDrive("Drive1", "admin_user");
-        dam.createFolder("Drive1", "Folder1");
-        dam.createFolder("Drive1", "Folder2");
+        // dam.createFolder("Drive1", "Folder1");
+        // dam.createFolder("Drive1", "Folder2");
 
         // Gán quyền truy cập cho các thư mục
         dam.grantFolderPermission("Drive1", "Folder1", "contributor1", Permission.CONTRIBUTOR);

@@ -15,6 +15,8 @@ public class TestUser {
         User user = new User("Dung vu");
         user.createDrive("Hoc Tap");
         user.createDrive("Giai Tri");
+        user.createFolderInDrive("Giai Tri", "LOL");
+        user.createFolderInDrive("Giai Tri", "Aoe");
         return user;
     }
 
@@ -25,11 +27,18 @@ public class TestUser {
     }
 
     @Test
-    public void UserHasPermission() {
+    public void UserHasPermissionInDrive() {
         User user = InitUser();
-        assertEquals(true, user.hasPermission("Hoc Tap", Permission.ADMIN));
-        assertEquals(false, user.hasPermission("Hoc Tap", Permission.CONTRIBUTOR));
-        assertEquals(false, user.hasPermission("GT", Permission.ADMIN));
+        assertEquals(true, user.hasDrivePermission("Hoc Tap", Permission.ADMIN));
+        assertEquals(false, user.hasDrivePermission("Hoc Tap", Permission.CONTRIBUTOR));
+        assertEquals(false, user.hasDrivePermission("GT", Permission.ADMIN));
+    }
+
+    @Test
+    public void UserHasPermissionInFolder() {
+        User user = InitUser();
+        assertEquals(true, user.hasFolderPermission("Giai Tri", "LOL", Permission.ADMIN));
+        assertEquals(false, user.hasFolderPermission("Hoc Tap", "LOL", Permission.ADMIN));
     }
 
 }

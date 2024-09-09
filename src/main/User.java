@@ -19,24 +19,27 @@ public class User {
         return username;
     }
 
-    public void grantPermission(String userName, String driveName, Permission permission) {
-        if(hasPermission(driveName, Permission.ADMIN)) {
-            Drive drive = Drive.findDriveByName(driveName, drivePermissions.keySet());
-            User user = findUserByUserName(userName, drive.getUserPermission().keySet());
-            
-        } else {
-            System.out.println("You don't have permission to do this!");
-        }
-    }
 
     public Set<Permission> getPermissions(Drive drive) {
         return drivePermissions.getOrDefault(drive, new HashSet<>());
     }
 
-    public boolean hasPermission(String driveName, Permission permission) {
-        for(Drive drive : drivePermissions.keySet()) {
-            if(drive.getName().equals(driveName)) {
+    public boolean hasDrivePermission(String driveName, Permission permission) {
+        for (Drive drive : drivePermissions.keySet()) {
+            if (drive.getName().equals(driveName)) {
                 return drivePermissions.get(drive).contains(permission);
+            }
+        }
+
+        return false;
+    }
+
+    public boolean hasFolderPermission(String driveName, String folderName, Permission permission) {
+        Drive driveFound = Drive.findDriveByName(driveName, drivePermissions.keySet());
+        if(driveFound != null) {
+            Folder folder = Folder.findFolderInDriveByFolderName(folderName, driveFound);
+            if(folder != null && folder.getUserPermissions().get(this).contains(permission)) {
+                return true;
             }
         }
 
@@ -59,19 +62,33 @@ public class User {
         }
     }
 
-    
-
     public Map<Drive, Set<Permission>> getDrivePermissions() {
         return drivePermissions;
     }
 
-
     public void createFolderInDrive(String driveName, String folderName) {
         Drive drive = Drive.findDriveByName(driveName, drivePermissions.keySet());
-        if(drive != null) {
-            
+
+        // Ensure the Drive exists
+        if (drive != null) {
+            // Check if the folder already exists in the drive
+            Folder folder = Folder.findFolderInListByFolderName(folderName, drive.getRootFolders());
+            if (folder == null) {
+                // Folder does not exist, so create a new one
+                folder = new Folder(folderName);
+                Set<Permission> drivePermiss = getPermissions(drive);
+                // Set permission of folder like drive of it
+                Map<User, Set<Permission>> userFolderPermission = new HashMap<>();
+                userFolderPermission.put(this, drivePermiss);
+                folder.setUserPermissions(userFolderPermission);
+                
+                drive.addRootFolder(folder);
+                System.out.println("Folder created successfully in drive: " + driveName);
+            } else {
+                System.out.println("Folder with the name '" + folderName + "' already exists in drive: " + driveName);
+            }
         } else {
-            System.out.println("Drive not found!");
+            System.out.println("Drive with the name '" + driveName + "' does not exist.");
         }
     }
 
@@ -80,13 +97,13 @@ public class User {
     }
 
     public static User findUserByUserName(String userName, Set<User> users) {
-        for(User user : users) {
-            if(user.getUserName().equals(userName)) {
+        for (User user : users) {
+            if (user.getUserName().equals(userName)) {
                 return user;
             }
         }
 
         return null;
     }
-    
+
 }
