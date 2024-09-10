@@ -17,6 +17,9 @@ public class TestUser {
         user.createDrive("Giai Tri");
         user.createFolderInDrive("Giai Tri", "LOL");
         user.createFolderInDrive("Giai Tri", "Aoe");
+        user.createSubFolderInFolder("Giai Tri", "LOL", "Riot");
+        user.createSubFolderInFolder("Giai Tri", "LOL", "ref");
+        user.createFileInFolder("Giai Tri", "Riot", "client.exe");
         return user;
     }
 
@@ -39,6 +42,12 @@ public class TestUser {
         User user = InitUser();
         assertEquals(true, user.hasFolderPermission("Giai Tri", "LOL", Permission.ADMIN));
         assertEquals(false, user.hasFolderPermission("Hoc Tap", "LOL", Permission.ADMIN));
+    }
+
+    @Test
+    public void UserHasPermissionInFile() {
+        User user = InitUser();
+        assertEquals(true, user.hasFilePermission("Giai Tri", "client.exe",Permission.ADMIN));
     }
 
 }

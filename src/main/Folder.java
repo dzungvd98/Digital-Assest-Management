@@ -41,8 +41,8 @@ public class Folder {
         return files;
     }
 
-    public void addFile(List<File> files) {
-        this.files = files;
+    public void addFile(File file) {
+        this.files.add(file);
     }
 
     public void grantPermission(User user, Permission permission) {
@@ -65,6 +65,15 @@ public class Folder {
         this.userPermissions = userPermissions;
     }
 
+
+    public Folder getParentFolder() {
+        return parentFolder;
+    }
+
+    public void setParentFolder(Folder parentFolder) {
+        this.parentFolder = parentFolder;
+    }
+
     public static Folder findFolderInListByFolderName(String folderName, List<Folder> list) {
         for(Folder folder : list) {
             if(folder.getName().equals(folderName)) {
@@ -73,6 +82,9 @@ public class Folder {
         }
         return null;
     }
+
+
+
 
     // Find folder in folder and subfolder by name
     public Folder findFolderByFolderNameInFolder(String folderName) {
@@ -103,5 +115,10 @@ public class Folder {
         }
         return null;
     } 
+
+    public static boolean isFolderExist(String folderName, Drive drive) {
+        Folder folderFound = findFolderInDriveByFolderName(folderName, drive);
+        return folderFound != null;
+    }
 
 }
