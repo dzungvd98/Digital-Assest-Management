@@ -101,7 +101,6 @@ public class Folder {
             }
         }
 
-        System.out.println("Folder not found!");
         return null;
     }
 

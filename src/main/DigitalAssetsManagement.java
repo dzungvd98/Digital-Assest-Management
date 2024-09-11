@@ -13,11 +13,23 @@ public class DigitalAssetsManagement {
         this.drives = new HashMap<>();
     }
 
+    public Map<String, User> getUsers() {
+        return users;
+    }
+
+    public Map<String, Drive> getDrives() {
+        return drives;
+    }
+
+
+
     public void addUser(String username) {
         if (!users.containsKey(username)) {
             users.put(username, new User(username));
         }
     }
+
+
 
     public void createDrive(String driveName, String ownerUsername) {
         User owner = users.get(ownerUsername);
@@ -53,7 +65,8 @@ public class DigitalAssetsManagement {
         }
     }
 
-    public void createSubFolderInFolder(String userName, String driveName, String parentFolderName, String newFolderName) {
+    public void createSubFolderInFolder(String userName, String driveName, String parentFolderName,
+            String newFolderName) {
         Drive drive = drives.get(driveName);
         if (drive != null) {
             User user = users.get(userName);
@@ -74,7 +87,7 @@ public class DigitalAssetsManagement {
         if (drive != null) {
             User user = users.get(userName);
             if (user.hasFolderPermission(drive, folderName, Permission.CONTRIBUTOR)
-                    && user.hasFolderPermission(drive, folderName, Permission.ADMIN)) {
+                    || user.hasFolderPermission(drive, folderName, Permission.ADMIN)) {
                 user.createFileInFolder(drive, folderName, newFile);
             } else {
                 System.out.println("User has not given permission!");
@@ -85,13 +98,20 @@ public class DigitalAssetsManagement {
         }
     }
 
-    public void grantDrivePermission(String driveName, String username, Permission permission) {
-        Drive drive = drives.get(driveName);
-        User user = users.get(username);
-        if (drive != null && user != null) {
-            drive.grantPermission(user, permission);
+    public void grantDrivePermission(String userGrantName, String userReceiveName, String driveName, Permission permission) {
+        User userGrant = users.get(userGrantName);
+        boolean isUserCanGrantPermission = userGrant.hasDrivePermission(driveName, Permission.ADMIN);
+        if (isUserCanGrantPermission) {
+            Drive drive = drives.get(driveName);
+            User userReceive = users.get(userReceiveName);
+            if (drive != null && userReceive != null) {
+                drive.grantPermission(userReceive, permission);
+                userReceive.addPermission(drive, permission);
+            } else {
+                System.out.println("Drive or user not found!");
+            }
         } else {
-            System.out.println("Drive or user not found!");
+            System.out.println("User not given permission!");
         }
     }
 

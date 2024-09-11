@@ -23,20 +23,16 @@ public class User {
         return drivePermissions.getOrDefault(drive, new HashSet<>());
     }
 
+    // Check is user has permission with drive by name
     public boolean hasDrivePermission(String driveName, Permission permission) {
-        System.out.println("drive Name: " + driveName + "xxxx");
         for (Drive drive : drivePermissions.keySet()) {
-            System.out.println(drive.getName());
             if (drive.getName().equals(driveName)) {
-                
                 return drivePermissions.get(drive).contains(permission);
-
             }
         }
         
         return false;
     }
-
 
     public void setDrivePermissions(Map<Drive, Set<Permission>> drivePermissions) {
         this.drivePermissions = drivePermissions;
@@ -80,9 +76,7 @@ public class User {
     public void setUpCreateDrive(Drive drive) {
         Set<Permission> permission = new HashSet<>();
         permission.add(Permission.ADMIN);
-        Map<Drive, Set<Permission>> drivePermis = new HashMap<>();
-        drivePermis.put(drive, permission);
-        this.setDrivePermissions(drivePermis);
+        drivePermissions.put(drive, permission);
         System.out.println("Drive created successfully.");
     }
 
@@ -126,7 +120,7 @@ public class User {
                 newFolder.setParentFolder(parentFolder);
                 newFolder.setUserPermissions(userFilePermission);
                 parentFolder.addsubFolder(newFolder);
-                System.out.println("Folder created successfully in folder: " + parentFolderName);
+                System.out.println("SubFolder " + newFolderName + " created successfully in folder: " + parentFolderName);
             }
 
         }
@@ -144,7 +138,7 @@ public class User {
             newFile.setParentFolder(folder);
             newFile.setUserPermissions(userFilePermission);
             folder.addFile(newFile);
-            System.out.println("File created successfully in folder: " + folderName);
+            System.out.println("File " + fileName + " created successfully in folder: " + folderName);
         }
     }
 
@@ -156,6 +150,15 @@ public class User {
         }
 
         return null;
+    }
+
+    // Add permission for user
+    public void addPermission(Drive drive, Permission permission) {
+        // Check is drive in Map
+        if(!drivePermissions.containsKey(drive)) {
+            drivePermissions.put(drive, new HashSet<>());
+        }
+        drivePermissions.get(drive).add(permission);
     }
 
 }

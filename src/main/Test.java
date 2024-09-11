@@ -12,5 +12,8 @@ public class Test {
         dam.createSubFolderInFolder("Dung vu", "HOCTAP", "MENTORSHIP", "DAM");
         dam.createSubFolderInFolder("Dung vu", "HOCTAP", "MENTORSHIP", "8WEEKSQL");
         dam.createFileInFolder("Dung vu", "HOCTAP", "8WEEKSQL", "balance_tree.txt");
+        dam.grantDrivePermission("Dung vu", "TN", "GIAITRI", Permission.CONTRIBUTOR);
+        User user = dam.getUsers().get("TN");
+        System.out.println(user.hasDrivePermission("GIAITRI", Permission.CONTRIBUTOR));
     }
 }
