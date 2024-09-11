@@ -7,7 +7,6 @@ import java.util.Set;
 public class DigitalAssetsManagement {
     private Map<String, User> users;
     private Map<String, Drive> drives;
-    private Map<String, Folder> folders;
 
     public DigitalAssetsManagement() {
         this.users = new HashMap<>();
@@ -15,31 +14,75 @@ public class DigitalAssetsManagement {
     }
 
     public void addUser(String username) {
-        users.put(username, new User(username));
+        if (!users.containsKey(username)) {
+            users.put(username, new User(username));
+        }
     }
 
     public void createDrive(String driveName, String ownerUsername) {
         User owner = users.get(ownerUsername);
         if (owner != null) {
-            Drive drive = new Drive(driveName, owner);
-            drives.put(driveName, drive);
+            boolean driveExist = drives.containsKey(driveName);
+            if (!driveExist) {
+                Drive newDrive = new Drive(driveName, owner);
+                owner.setUpCreateDrive(newDrive);
+                drives.put(driveName, newDrive);
+                addUser(ownerUsername);
+            } else {
+                System.out.println("Drive already exist!");
+            }
+
         } else {
             System.out.println("Owner user not found!");
         }
     }
 
-    public void createFolder(String userName, String driveName, String folderName) {
+    public void createFolderInDrive(String userName, String driveName, String folderName) {
         Drive drive = drives.get(driveName);
         if (drive != null) {
-            Folder folder = new Folder(folderName);
-            drive.addRootFolder(folder);
+            User user = users.get(userName);
+            if (user.hasDrivePermission(driveName, Permission.CONTRIBUTOR)
+                    || user.hasDrivePermission(driveName, Permission.ADMIN)) {
+                user.createFolderInDrive(drive, folderName);
+            } else {
+                System.out.println("User has not given permission!");
+            }
+
         } else {
             System.out.println("Drive not found!");
         }
     }
 
-    public void createFile(String driveName, String folderName, String fileName) {
-        
+    public void createSubFolderInFolder(String userName, String driveName, String parentFolderName, String newFolderName) {
+        Drive drive = drives.get(driveName);
+        if (drive != null) {
+            User user = users.get(userName);
+            if (user.hasFolderPermission(drive, parentFolderName, Permission.CONTRIBUTOR)
+                    || user.hasFolderPermission(drive, parentFolderName, Permission.ADMIN)) {
+                user.createSubFolderInFolder(drive, parentFolderName, newFolderName);
+            } else {
+                System.out.println("User has not given permission!");
+            }
+
+        } else {
+            System.out.println("Drive not found!");
+        }
+    }
+
+    public void createFileInFolder(String userName, String driveName, String folderName, String newFile) {
+        Drive drive = drives.get(driveName);
+        if (drive != null) {
+            User user = users.get(userName);
+            if (user.hasFolderPermission(drive, folderName, Permission.CONTRIBUTOR)
+                    && user.hasFolderPermission(drive, folderName, Permission.ADMIN)) {
+                user.createFileInFolder(drive, folderName, newFile);
+            } else {
+                System.out.println("User has not given permission!");
+            }
+
+        } else {
+            System.out.println("Drive not found!");
+        }
     }
 
     public void grantDrivePermission(String driveName, String username, Permission permission) {
@@ -102,7 +145,8 @@ public class DigitalAssetsManagement {
                     }
                     break;
                 case "view":
-                    if (permissions.contains(Permission.READER) || permissions.contains(Permission.ADMIN) || permissions.contains(Permission.CONTRIBUTOR)) {
+                    if (permissions.contains(Permission.READER) || permissions.contains(Permission.ADMIN)
+                            || permissions.contains(Permission.CONTRIBUTOR)) {
                         System.out.println("View allowed!");
                     } else {
                         System.out.println("Action not allowed!");

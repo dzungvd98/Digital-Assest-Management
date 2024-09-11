@@ -2,16 +2,15 @@ package main;
 
 public class Test {
     public static void main(String[] args) {
-        User user = new User("Dung vu");
-        user.createDrive("Hoc Tap");
-        user.createDrive("Giai Tri");
-        user.createFolderInDrive("Giai Tri", "LOL");
-        user.createFolderInDrive("Giai Tri", "Aoe");
-        user.createSubFolderInFolder("Giai Tri", "LOL", "Riot");
-        user.createSubFolderInFolder("Giai Tri", "LOL", "ref");
-        user.createFileInFolder("Giai Tri", "Riot", "client.exe");
-
-        boolean a = user.hasFilePermission("Giai Tri", "client.exe",Permission.ADMIN);
-        System.out.println(a);
+        DigitalAssetsManagement dam = new DigitalAssetsManagement();
+        dam.addUser("Dung vu");
+        dam.addUser("TN");
+        dam.createDrive("HOCTAP", "Dung vu");
+        dam.createDrive("GIAITRI", "Dung vu");
+        dam.createFolderInDrive("Dung vu", "HOCTAP", "PTIT");
+        dam.createFolderInDrive("Dung vu", "HOCTAP", "MENTORSHIP");
+        dam.createSubFolderInFolder("Dung vu", "HOCTAP", "MENTORSHIP", "DAM");
+        dam.createSubFolderInFolder("Dung vu", "HOCTAP", "MENTORSHIP", "8WEEKSQL");
+        dam.createFileInFolder("Dung vu", "HOCTAP", "8WEEKSQL", "balance_tree.txt");
     }
 }
