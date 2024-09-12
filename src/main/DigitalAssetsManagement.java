@@ -179,4 +179,35 @@ public class DigitalAssetsManagement {
             System.out.println("Drive or user not found!");
         }
     }
+
+    public void showAllDrive() {
+        for(Drive drive : drives.values()) {
+            printDrive(drive);
+        }
+    }
+
+
+    public void printFolder(Folder folder, String indent) {
+        System.out.println(indent + "Folder: " + folder.getName());
+
+        // In các file trong folder hiện tại
+        for (File file : folder.getFiles()) {
+            System.out.println(indent + "  File: " + file.getName());
+        }
+
+        // Đệ quy in các subFolder
+        for (Folder subFolder : folder.getSubFolders()) {
+            printFolder(subFolder, indent + "  ");
+        }
+    }
+
+    // Hàm in toàn bộ nội dung của Drive
+    public void printDrive(Drive drive) {
+        System.out.println("Drive: " + drive.getName());
+
+        // Duyệt qua các rootFolder và in nội dung của chúng
+        for (Folder rootFolder : drive.getRootFolders()) {
+            printFolder(rootFolder, "  ");
+        }
+    }
 }

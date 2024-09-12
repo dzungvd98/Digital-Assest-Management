@@ -14,6 +14,16 @@ public class Test {
         dam.createFileInFolder("Dung vu", "HOCTAP", "8WEEKSQL", "balance_tree.txt");
         dam.grantDrivePermission("Dung vu", "TN", "GIAITRI", Permission.CONTRIBUTOR);
         User user = dam.getUsers().get("TN");
+        dam.createFolderInDrive("TN", "GIAITRI", "Dot Kich");
+        dam.createFileInFolder("TN", "GIAITRI", "Dot Kich", "crossfire.exe");
+        dam.createSubFolderInFolder("TN", "GIAITRI", "Dot Kich", "res");
+        dam.createFileInFolder("TN", "GIAITRI", "res", "gun.bat");
+        dam.createSubFolderInFolder("TN", "GIAITRI", "res", "hm");
+        dam.createFileInFolder("TN", "GIAITRI", "hm", "ak47.txt");
         System.out.println(user.hasDrivePermission("GIAITRI", Permission.CONTRIBUTOR));
+
+        System.out.println(user.hasFilePermission("GIAITRI", "crossfire.exe", Permission.CONTRIBUTOR));
+        // dam.showAllDrive();
+        user.showDriveHasPermission();
     }
 }

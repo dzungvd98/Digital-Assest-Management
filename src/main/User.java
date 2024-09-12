@@ -30,7 +30,7 @@ public class User {
                 return drivePermissions.get(drive).contains(permission);
             }
         }
-        
+
         return false;
     }
 
@@ -40,9 +40,9 @@ public class User {
 
     public boolean hasFolderPermission(Drive drive, String folderName, Permission permission) {
         Folder folder = Folder.findFolderInDriveByFolderName(folderName, drive);
-            if (folder != null && folder.getPermissions(this).contains(permission)) {
-                return true;
-            }
+        if (folder != null && folder.getPermissions(this).contains(permission)) {
+            return true;
+        }
         return false;
     }
 
@@ -86,7 +86,7 @@ public class User {
 
     public void createFolderInDrive(Drive drive, String folderName) {
 
-        Folder folder = Folder.findFolderInListByFolderName(folderName, drive.getRootFolders());
+        Folder folder = Folder.findFolderInDriveByFolderName(folderName, drive);
         if (folder == null) {
             // Folder does not exist, so create a new one
             folder = new Folder(folderName);
@@ -104,8 +104,7 @@ public class User {
     }
 
     public void createSubFolderInFolder(Drive drive, String parentFolderName, String newFolderName) {
-
-        Folder parentFolder = Folder.findFolderInListByFolderName(parentFolderName, drive.getRootFolders());
+        Folder parentFolder = Folder.findFolderInDriveByFolderName(parentFolderName, drive);
         if (parentFolder == null) {
             System.out.println("Folder not found!");
         } else {
@@ -120,7 +119,8 @@ public class User {
                 newFolder.setParentFolder(parentFolder);
                 newFolder.setUserPermissions(userFilePermission);
                 parentFolder.addsubFolder(newFolder);
-                System.out.println("SubFolder " + newFolderName + " created successfully in folder: " + parentFolderName);
+                System.out
+                        .println("SubFolder " + newFolderName + " created successfully in folder: " + parentFolderName);
             }
 
         }
@@ -155,10 +155,46 @@ public class User {
     // Add permission for user
     public void addPermission(Drive drive, Permission permission) {
         // Check is drive in Map
-        if(!drivePermissions.containsKey(drive)) {
+        if (!drivePermissions.containsKey(drive)) {
             drivePermissions.put(drive, new HashSet<>());
         }
         drivePermissions.get(drive).add(permission);
+    }
+
+    // Show all drive of user
+    public void showDriveHasPermission() {
+        for (Drive drive : drivePermissions.keySet()) {
+            if (this.hasDrivePermission(drive.getName(), Permission.CONTRIBUTOR)) {
+                printDrive(drive);
+            }
+        }
+    }
+
+    private void printDrive(Drive drive) {
+        System.out.println("Drive: " + drive.getName());
+        for (Folder rootFolder : drive.getRootFolders()) {
+            printFolder(drive, rootFolder, "  ");
+
+        }
+    }
+
+    private void printFolder(Drive drive, Folder folder, String indent) {
+        if (this.hasFolderPermission(drive, folder.getName(), Permission.CONTRIBUTOR)) {
+            System.out.println(indent + "Folder: " + folder.getName());
+
+            // In các file trong folder hiện tại
+            for (File file : folder.getFiles()) {
+                if(hasFilePermission(drive.getName(), file.getName(), Permission.CONTRIBUTOR))
+                System.out.println(indent + "  File: " + file.getName());
+            }
+
+            // Đệ quy in các subFolder
+            for (Folder subFolder : folder.getSubFolders()) {
+                printFolder(drive, subFolder, indent + "  ");
+        }
+        }
+        
+
     }
 
 }

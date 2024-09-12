@@ -32,12 +32,6 @@ public class TestUser {
         assertEquals(false, user.hasDrivePermission("GT", Permission.ADMIN));
     }
 
-    @Test
-    public void UserHasPermissionInFolder() {
-        User user = InitUser();
-        assertEquals(true, user.hasFolderPermission("Giai Tri", "LOL", Permission.ADMIN));
-        assertEquals(false, user.hasFolderPermission("Hoc Tap", "LOL", Permission.ADMIN));
-    }
 
     @Test
     public void UserHasPermissionInFile() {

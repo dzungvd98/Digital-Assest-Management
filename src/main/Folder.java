@@ -76,6 +76,7 @@ public class Folder {
 
     public static Folder findFolderInListByFolderName(String folderName, List<Folder> list) {
         for(Folder folder : list) {
+            
             if(folder.getName().equals(folderName)) {
                 return folder;
             }
