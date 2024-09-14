@@ -170,7 +170,7 @@ public class User {
         }
     }
 
-    private void printDrive(Drive drive) {
+    public void printDrive(Drive drive) {
         System.out.println("Drive: " + drive.getName());
         for (Folder rootFolder : drive.getRootFolders()) {
             printFolder(drive, rootFolder, "  ");
@@ -178,23 +178,68 @@ public class User {
         }
     }
 
-    private void printFolder(Drive drive, Folder folder, String indent) {
+    public void printFolder(Drive drive, Folder folder, String indent) {
         if (this.hasFolderPermission(drive, folder.getName(), Permission.CONTRIBUTOR)) {
             System.out.println(indent + "Folder: " + folder.getName());
 
             // In các file trong folder hiện tại
             for (File file : folder.getFiles()) {
-                if(hasFilePermission(drive.getName(), file.getName(), Permission.CONTRIBUTOR))
-                System.out.println(indent + "  File: " + file.getName());
+                if (hasFilePermission(drive.getName(), file.getName(), Permission.CONTRIBUTOR))
+                    System.out.println(indent + "  File: " + file.getName());
             }
 
             // Đệ quy in các subFolder
             for (Folder subFolder : folder.getSubFolders()) {
                 printFolder(drive, subFolder, indent + "  ");
+            }
         }
-        }
-        
+    }
 
+    public void removeDrivePermission(String userName, Drive drive, Permission permission) {
+        boolean userHasAdminPermission = this.hasDrivePermission(drive.getName(), Permission.ADMIN);
+        if (userHasAdminPermission) {
+            User userRemoved = findUserByUserName(userName, drive.getUserPermission().keySet());
+            if (userRemoved != null) {
+                boolean hasPermission = userRemoved.hasDrivePermission(drive.getName(), permission);
+                if (hasPermission) {
+                    Set<Permission> permiss = userRemoved.getPermissions(drive);
+                    permiss.remove(permission);
+                    userRemoved.getDrivePermissions().put(drive, permiss);
+                    drive.getUserPermission().put(userRemoved, permiss);
+                    for(Folder rootFolder : drive.getRootFolders()) {
+                        removeFolderPermission(userName, drive, rootFolder, permission);
+                    }
+                    System.out.println("Update permission successfully!");
+                } else {
+                    System.out.println("User not have this permission!");
+                }
+            } else {
+                System.out.println("User not found!");
+            }
+        } else {
+            System.out.println("User " + this.getUserName() + " not have admin permission!");
+        }
+    }
+
+    public void removeFolderPermission(String userName, Drive drive, Folder folder, Permission permission) {
+        User userRemoved = User.findUserByUserName(userName, folder.getUserPermissions().keySet());
+        if (userRemoved != null) {
+            boolean hasPermission = userRemoved.hasFolderPermission(drive, folder.getName(), permission);
+            System.out.println(permission.toString());
+            if (hasPermission) {
+                Set<Permission> permiss = userRemoved.getPermissions(drive);
+                permiss.remove(permission);
+                folder.getUserPermissions().put(userRemoved, permiss);
+            } else {
+                System.out.println("User not have this permission!");
+            }
+        } else {
+            System.out.println("User not found!");
+        }
+
+        for(Folder subFolder : folder.getSubFolders()) {
+            removeFolderPermission(userName, drive, subFolder, permission);
+        }
     }
 
 }

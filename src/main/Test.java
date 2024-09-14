@@ -14,6 +14,7 @@ public class Test {
         dam.createFileInFolder("Dung vu", "HOCTAP", "8WEEKSQL", "balance_tree.txt");
         dam.grantDrivePermission("Dung vu", "TN", "GIAITRI", Permission.CONTRIBUTOR);
         User user = dam.getUsers().get("TN");
+        User user2 = dam.getUsers().get("Dung vu");
         dam.createFolderInDrive("TN", "GIAITRI", "Dot Kich");
         dam.createFileInFolder("TN", "GIAITRI", "Dot Kich", "crossfire.exe");
         dam.createSubFolderInFolder("TN", "GIAITRI", "Dot Kich", "res");
@@ -25,5 +26,14 @@ public class Test {
         System.out.println(user.hasFilePermission("GIAITRI", "crossfire.exe", Permission.CONTRIBUTOR));
         // dam.showAllDrive();
         user.showDriveHasPermission();
+        System.out.println(user.hasDrivePermission("GIAITRI", Permission.CONTRIBUTOR));
+        
+        boolean check = user.hasFolderPermission(dam.getDrives().get("GIAITRI"), "res", Permission.CONTRIBUTOR);
+        System.out.println(check);
+        user2.removeDrivePermission("TN", dam.getDrives().get("GIAITRI"), Permission.CONTRIBUTOR);
+        
+        System.out.println(user.hasDrivePermission("GIAITRI", Permission.CONTRIBUTOR));
+
+
     }
 }
